@@ -1,0 +1,10 @@
+flowchart TD
+  A[Configuration value changed] --> B[Redeploy]
+  B --> C{Which model is actually serving?}
+  C -->|Deployment status only| D[Intent, not evidence]
+  C -->|Generation telemetry| E[Observed serving model]
+  E --> F{Matches the intended model?}
+  F -->|Yes| G[Activation confirmed]
+  F -->|No| H[Revert via retained rollback target]
+  H --> A
+  style D stroke-dasharray: 4 4

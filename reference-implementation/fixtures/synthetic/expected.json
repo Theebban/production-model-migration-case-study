@@ -1,0 +1,7 @@
+[
+  { "caseId": "SYN-001", "severity": "medium", "requiredChecks": ["inspect-seal"] },
+  { "caseId": "SYN-002", "severity": "high", "requiredChecks": ["inspect-coupling"] },
+  { "caseId": "SYN-003", "severity": "low", "requiredChecks": [] },
+  { "caseId": "SYN-004", "severity": "medium", "requiredChecks": ["inspect-bearing"] },
+  { "caseId": "SYN-005", "severity": "high", "requiredChecks": ["inspect-seal"] }
+]

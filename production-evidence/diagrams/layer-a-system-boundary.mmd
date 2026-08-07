@@ -1,0 +1,20 @@
+flowchart LR
+  subgraph client[Client surface]
+    U[Authenticated user]
+  end
+  subgraph app[Application, multi-tenant, serverless]
+    R[Request handler]
+    C[(Runtime configuration)]
+    G[Generation path under test]
+    T[(Generation telemetry)]
+  end
+  subgraph ext[External model provider]
+    M[Serving model]
+  end
+  U --> R
+  R --> G
+  C -. supplies model identity at run time .-> G
+  G --> M
+  G --> T
+  classDef boundary stroke-dasharray: 4 4
+  class ext boundary

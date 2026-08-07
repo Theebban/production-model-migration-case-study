@@ -1,0 +1,7 @@
+[
+  { "caseId": "SYN-001", "asset": "pump-A12", "rawNote": "Operator reports a slow seep near the seal and rising noise during startup." },
+  { "caseId": "SYN-002", "asset": "fan-B04", "rawNote": "Visible crack on the coupling guard, plus vibration above the usual band." },
+  { "caseId": "SYN-003", "asset": "valve-C77", "rawNote": "Routine round completed. No leak, no noise, gasket looks intact." },
+  { "caseId": "SYN-004", "asset": "motor-D31", "rawNote": "Bearing wear suspected after a drift in current draw across the shift." },
+  { "caseId": "SYN-005", "asset": "pump-E09", "rawNote": "Overheat alarm cleared itself. Seal area warm to touch, slight noise." }
+]

@@ -1,0 +1,14 @@
+flowchart TD
+  A[Declare acceptance criteria] --> B[Hash and lock the criteria]
+  B --> C[Score candidates under blind labels]
+  C --> D{Any candidate meets the criteria?}
+  D -->|No| E[Stop. Record nothing as accepted]
+  D -->|Yes| F[Record acceptance for that exact candidate]
+  F --> G{Activation flag: acceptance recorded?}
+  G -->|No, fail-closed| H[Activation refused]
+  G -->|Yes| I[Activate by configuration]
+  I --> J[Bounded synthetic smoke, hard ceiling]
+  J --> K[Assert serving model from telemetry]
+  K --> L{Confirmed?}
+  L -->|No| M[Rollback exercise]
+  L -->|Yes| N[Human review before any final action]
