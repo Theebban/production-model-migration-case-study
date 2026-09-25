@@ -55,16 +55,22 @@ process around it (predeclaration, comparison, bounding, staged activation).
 
 ## 4. How the reference implementation closes each gap
 
-| Gap in the historical case | What the reference implementation demonstrates |
-|---|---|
-| No predeclared criteria | Criteria hashed and locked before scoring; moving the bar changes the hash, and a test asserts it |
-| No comparative selection | Blind, identifier-neutral scoring of multiple candidates; one is rejected on a real threshold |
-| No pre-bounded verification | Hard call ceiling enforced by the loop, written stop conditions, trim reported rather than silent |
-| No staged activation | Fail-closed activation flag refusing anything but the accepted candidate, plus a fail-open kill switch |
-| Verification scoped to one path | An explicit telemetry assertion where an empty log returns unconfirmed rather than passing |
-| Rollback asserted, not exercised | An executable rollback exercise with a test on the restored state |
+Layer B closes each gap in runnable code. Since `v1.0.0`, the migration controls are provided
+by ModelPromote, which generalised them, and this repository supplies the evaluator, the
+activation target and the telemetry around it. See
+[`REFERENCE_IMPLEMENTATION.md`](REFERENCE_IMPLEMENTATION.md) for what moved, what stayed and
+what was dropped.
 
-Run `npm run verify` to see the whole sequence execute.
+| Gap in the historical case | What Layer B demonstrates |
+|---|---|
+| No predeclared criteria | A policy hashed when the migration is registered; deciding or approving after the bar has moved is refused, and a test asserts it |
+| No comparative selection | Baseline and candidate scored by a blind evaluator that never sees a model identity; one candidate is rejected on four rules at once |
+| No pre-bounded verification | Verification traffic under a hard ceiling enforced in the loop, with truncation reported rather than silent |
+| No staged activation | Activation refused until a named person approves, then a configuration write confirmed by read-back; a silent no-op write and a drifted baseline are both caught |
+| Verification scoped to one path | A telemetry assertion over the application's own log, recording the model the provider reports; a moved provider alias fails verification |
+| Rollback asserted, not exercised | A rollback drill to the target locked at registration, recorded only after the configuration reads the baseline back |
+
+Run `npm run demo` to see the whole sequence execute.
 
 ## 5. What I would do differently
 

@@ -43,6 +43,10 @@ Specifically:
 
 - The reference implementation was written from scratch for this repository. It is not an
   extract, a filtered copy or a rewrite of any private codebase.
+- Since `v2.0.0` the reference implementation depends on
+  [ModelPromote](https://github.com/Theebban/modelpromote), a separate public library by the
+  same author. It was likewise written from scratch, company-neutral from its first commit,
+  and published under Apache-2.0. It is not derived from the production system either.
 - The repository has fresh git history. No commit was imported from anywhere.
 - Every fixture is synthetic and authored here. No fixture is derived from real data,
   including by anonymisation.

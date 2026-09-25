@@ -1,28 +1,26 @@
 {
   "name": "production-model-migration-case-study",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "A verified production cutover and an independently authored reference implementation of a controlled model migration.",
+  "description": "A verified production cutover and an independently authored reference implementation of a controlled model migration, now governed by ModelPromote.",
   "type": "module",
   "engines": {
     "node": ">=22.6.0"
   },
   "scripts": {
-    "install:check": "node --version",
     "typecheck": "tsc --noEmit",
     "lint": "eslint reference-implementation",
     "test": "node --experimental-strip-types --test reference-implementation/tests/*.test.ts",
-    "benchmark": "node --experimental-strip-types reference-implementation/src/cli.ts benchmark",
-    "activate": "node --experimental-strip-types reference-implementation/src/cli.ts activate",
-    "smoke": "node --experimental-strip-types reference-implementation/src/cli.ts smoke",
-    "telemetry": "node --experimental-strip-types reference-implementation/src/cli.ts telemetry",
-    "rollback": "node --experimental-strip-types reference-implementation/src/cli.ts rollback",
-    "verify": "node --experimental-strip-types reference-implementation/src/cli.ts verify"
+    "demo": "node --experimental-strip-types reference-implementation/src/demo.ts",
+    "check": "npm run typecheck && npm run lint && npm test"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "eslint": "^9.39.5",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.66.0"
+  },
+  "dependencies": {
+    "modelpromote": "0.1.2"
   }
 }

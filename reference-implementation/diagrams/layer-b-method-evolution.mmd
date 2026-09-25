@@ -1,0 +1,39 @@
+flowchart LR
+  subgraph V1["v1.0.0, 2026-08"]
+    a1["criteria hashed before scoring"]
+    a2["fail-closed activation flag"]
+    a3["bounded smoke, loop-enforced ceiling"]
+    a4["telemetry assertion, empty log unconfirmed"]
+    a5["executable rollback"]
+    a6["fail-open kill switch"]
+    a7["consecutive-failure stop"]
+    b1["blind comparative benchmark"]
+    b2["configuration-authoritative resolver"]
+    b3["per-output human review"]
+  end
+  subgraph MP["now in ModelPromote"]
+    m1["policy lock, enforced at decide and approve"]
+    m2["activation only from APPROVED, two-phase, read-back"]
+    m3["bounded verification, ceiling in the loop"]
+    m4["temporal-window telemetry assertion"]
+    m5["two-phase rollback to a locked target"]
+    m6["emergency rollback when the ledger is unreadable"]
+  end
+  subgraph HERE["kept in this repository"]
+    h1["BlindEvaluator"]
+    h2["RuntimeConfigTarget"]
+    h3["per-output human review"]
+  end
+  a1 --> m1
+  a2 --> m2
+  a3 --> m3
+  a4 --> m4
+  a5 --> m5
+  a6 --> m6
+  subgraph DROP["not carried forward"]
+    gone["ModelPromote bounds verification<br/>by request count only"]
+  end
+  a7 -.-> gone
+  b1 --> h1
+  b2 --> h2
+  b3 --> h3

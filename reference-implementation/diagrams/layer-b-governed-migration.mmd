@@ -1,0 +1,17 @@
+flowchart TD
+  A["Register candidate<br/>policy hashed, baseline and rollback target locked<br/><i>ModelPromote</i>"] --> B["Blind evaluation of baseline and candidate<br/>scoring never sees a model identity<br/><i>this repository: BlindEvaluator</i>"]
+  B --> C{"Declared policy passes?<br/><i>ModelPromote</i>"}
+  C -- "no" --> R["REJECTED, then abandoned<br/>both stay in the record"]
+  C -- "yes" --> D["Named human approves<br/>a machine verdict is not permission<br/><i>ModelPromote</i>"]
+  D --> E{"Production still serving<br/>the measured baseline?"}
+  E -- "no" --> X["Refused before any write<br/>baseline drift"]
+  E -- "yes" --> F["Write runtime configuration, then read it back<br/><i>this repository: RuntimeConfigTarget</i>"]
+  F --> G{"Read-back equals candidate?"}
+  G -- "no" --> Y["ACTIVATION_FAILED<br/>a silent no-op write is caught"]
+  G -- "yes" --> H["Bounded verification traffic, hard ceiling<br/><i>ModelPromote</i>"]
+  H --> I{"Generation log after the window mark<br/>names only the candidate?<br/><i>this repository: GenerationLog</i>"}
+  I -- "no" --> Z["FAILED_VERIFICATION<br/>for example, a provider alias moved"]
+  I -- "yes" --> J["VERIFIED"]
+  J --> K["Stabilise"]
+  J --> L["Rollback to the locked target, confirmed by read-back"]
+  Z --> L

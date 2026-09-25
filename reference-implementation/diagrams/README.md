@@ -1,4 +1,4 @@
-# Layer B diagrams (synthetic reference implementation)
+# Layer B diagrams (reference implementation, governed by ModelPromote)
 
 > This synthetic reference implementation demonstrates a strengthened reusable protocol.
 > Not every control shown here is asserted to have governed the historical production
@@ -8,55 +8,55 @@ Each diagram has exactly one source of truth: the `.mmd` file. The `.svg` beside
 rendered output of that file and nothing else, so the two cannot drift. A plain-text
 description follows each one for readers using a screen reader or viewing without images.
 
-## Controlled migration protocol
+The diagrams for the original reference implementation are preserved unchanged at the
+`v1.0.0` tag.
 
-![Controlled migration protocol: acceptance criteria are declared then hashed and locked before candidates are scored under blind labels. If no candidate meets the criteria the run stops and records nothing as accepted. If one does, acceptance is recorded for that exact candidate. The activation flag then checks whether acceptance was recorded; if not it fails closed and activation is refused, and if so the candidate is activated by configuration. A bounded synthetic smoke with a hard ceiling follows, then the serving model is asserted from telemetry. If it is not confirmed, the rollback exercise runs; if it is confirmed, a human review gate precedes any final action.](layer-b-controlled-migration-protocol.svg)
+## Governed migration
 
-Source: [`layer-b-controlled-migration-protocol.mmd`](layer-b-controlled-migration-protocol.mmd)
+![Governed migration: ModelPromote registers the candidate, hashing the policy and locking the baseline and rollback target. This repository's blind evaluator scores baseline and candidate without ever seeing a model identity. ModelPromote applies the declared policy; a failing candidate is rejected and then abandoned, and both stay in the record. A passing candidate needs a named human approval, because a machine verdict is not permission. If production is no longer serving the measured baseline, activation is refused before any write. Otherwise the runtime configuration is written and read back; a mismatch records ACTIVATION_FAILED, which catches a silent no-op write. ModelPromote then issues bounded verification traffic under a hard ceiling, and the application's generation log, after a window mark, must name only the candidate; if it does not, for example because a provider alias moved, the state is FAILED_VERIFICATION. A verified migration can be stabilised or rolled back; a failed verification is rolled back. Rollback goes to the locked target and is confirmed by read-back.](layer-b-governed-migration.svg)
 
-Plain-text equivalent:
-
-```
-declare acceptance criteria -> hash and lock the criteria
-  -> score candidates under blind labels
-  -> any candidate meets the criteria?
-       no  -> stop, record nothing as accepted
-       yes -> record acceptance for that exact candidate
-                -> activation flag: acceptance recorded?
-                     no  -> activation refused        (fail-closed)
-                     yes -> activate by configuration
-                              -> bounded synthetic smoke, hard ceiling
-                              -> assert serving model from telemetry
-                                   confirmed?
-                                     no  -> rollback exercise
-                                     yes -> human review before any final action
-```
-
-The criteria are locked **before** any score exists, so the bar cannot move to fit a
-result. Activation is refused unless an acceptance verdict exists for that exact candidate.
-
-## Telemetry and rollback sequence
-
-![Telemetry and rollback sequence: the operator sets the activated model in configuration after acceptance, then runs the bounded smoke against the application with the ceiling enforced. The application appends a telemetry row carrying the case identifier and the serving model. The operator asserts the serving model against the telemetry log, which returns the observed identities and the row count. If the log is empty the result is not confirmed, because absence is not evidence. If there is a mismatch or the kill switch is engaged, the operator reverts configuration to the retained rollback target, which is a configuration change rather than a code release.](layer-b-telemetry-rollback-sequence.svg)
-
-Source: [`layer-b-telemetry-rollback-sequence.mmd`](layer-b-telemetry-rollback-sequence.mmd)
+Source: [`layer-b-governed-migration.mmd`](layer-b-governed-migration.mmd)
 
 Plain-text equivalent:
 
 ```
-operator  -> configuration : set activated model (after acceptance)
-operator  -> application   : run bounded smoke (ceiling enforced)
-application -> telemetry   : append row {caseId, servedBy}
-operator  -> telemetry     : assert serving model
-telemetry -> operator      : observed identities + row count
-
-  if the log is empty:
-    telemetry -> operator  : not confirmed (absence is not evidence)
-
-  if there is a mismatch, or the kill switch is engaged:
-    operator -> configuration : revert to retained rollback target
-    note: configuration change, no code release
+register candidate                                  ModelPromote
+  -> blind evaluation of baseline and candidate      this repository: BlindEvaluator
+  -> declared policy passes?                         ModelPromote
+       no  -> REJECTED, then abandoned (both recorded)
+       yes -> named human approves                   ModelPromote
+                -> production still on the measured baseline?
+                     no  -> refused before any write (baseline drift)
+                     yes -> write runtime config, read it back
+                                                     this repository: RuntimeConfigTarget
+                              read-back equals candidate?
+                                no  -> ACTIVATION_FAILED
+                                yes -> bounded verification traffic   ModelPromote
+                                         -> log after the window mark names only the candidate?
+                                                     this repository: GenerationLog
+                                              no  -> FAILED_VERIFICATION -> rollback
+                                              yes -> VERIFIED -> stabilise, or rollback
+rollback: to the target locked at register, confirmed by read-back
 ```
 
-An empty log returns **not confirmed**. A check that passes when it has seen nothing is not
-a check.
+## Method evolution
+
+![Method evolution: of the ten controls in the v1.0.0 reference implementation, six now live in ModelPromote: criteria hashed before scoring became a policy lock enforced at decide and approve; the fail-closed activation flag became activation only from APPROVED, two-phase with read-back; the bounded smoke became bounded verification with the ceiling in the loop; the telemetry assertion became the temporal-window telemetry assertion; the executable rollback became a two-phase rollback to a locked target; and the fail-open kill switch became emergency rollback when the ledger is unreadable. Three are kept in this repository: the blind comparative benchmark as BlindEvaluator, the configuration-authoritative resolver as RuntimeConfigTarget, and per-output human review. One, the consecutive-failure stop, was not carried forward, because ModelPromote bounds verification by request count only.](layer-b-method-evolution.svg)
+
+Source: [`layer-b-method-evolution.mmd`](layer-b-method-evolution.mmd)
+
+Plain-text equivalent:
+
+```
+v1.0.0 control                               now
+criteria hashed before scoring            -> ModelPromote: policy lock, enforced at decide and approve
+fail-closed activation flag               -> ModelPromote: activation only from APPROVED, two-phase, read-back
+bounded smoke, loop-enforced ceiling      -> ModelPromote: bounded verification, ceiling in the loop
+telemetry assertion, empty log unconfirmed-> ModelPromote: temporal-window telemetry assertion
+executable rollback                       -> ModelPromote: two-phase rollback to a locked target
+fail-open kill switch                     -> ModelPromote: emergency rollback when the ledger is unreadable
+blind comparative benchmark               -> this repository: BlindEvaluator
+configuration-authoritative resolver      -> this repository: RuntimeConfigTarget
+per-output human review                   -> this repository: per-output human review
+consecutive-failure stop                  -> NOT carried forward (ModelPromote bounds by request count only)
+```
