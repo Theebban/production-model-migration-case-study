@@ -1,4 +1,4 @@
-// The migration lifecycle, governed by ModelPromote, against the synthetic application.
+// The synthetic migration lifecycle, delegated to ModelPromote, against the synthetic application.
 // Each test drives one failure a real migration can meet and asserts the specific refusal
 // AND the state it leaves, because "it threw" can pass for the wrong reason.
 

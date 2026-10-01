@@ -1,7 +1,7 @@
 // BLIND, IDENTIFIER-NEUTRAL EVALUATION, as a ModelPromote evaluator.
 //
 // This is one of the two controls the original reference implementation had that
-// ModelPromote deliberately does not own: ModelPromote governs the migration, and leaves
+// ModelPromote deliberately does not own: ModelPromote runs the migration lifecycle, and leaves
 // "how good is this output" to an evaluator the adopter supplies. This is that evaluator.
 //
 // BLINDNESS IS STRUCTURAL. `scoreCase` receives an output and an expectation and nothing

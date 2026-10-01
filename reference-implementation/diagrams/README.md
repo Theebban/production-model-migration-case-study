@@ -1,4 +1,4 @@
-# Layer B diagrams (reference implementation, governed by ModelPromote)
+# Layer B diagrams (the reference implementation, which delegates its migration lifecycle to ModelPromote)
 
 > This synthetic reference implementation demonstrates a strengthened reusable protocol.
 > Not every control shown here is asserted to have governed the historical production

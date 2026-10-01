@@ -31,7 +31,7 @@ const now = study.ports.now;
 const say = (s = ''): void => console.log(s);
 const step = (s: string): void => say(`\n== ${s}`);
 
-say('Layer B demonstration: the migration method, governed by ModelPromote, on synthetic data.');
+say('Layer B demonstration: the migration method on synthetic data, with its lifecycle delegated to ModelPromote.');
 say('This synthetic reference implementation demonstrates a strengthened reusable protocol.');
 say('Not every control shown here is asserted to have governed the historical production cutover.');
 say(`\nProduction is serving: ${study.target.read()}  (read from runtime configuration)`);

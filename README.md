@@ -17,7 +17,7 @@ effect, and holding a rollback that works under pressure.
 | Layer | What it is | Where |
 |---|---|---|
 | **A. Verified production case** | What I actually did in a production system, limited to what the evidence supports | [`VERIFIED_PRODUCTION_CASE.md`](VERIFIED_PRODUCTION_CASE.md) |
-| **B. Reference implementation and method evolution** | A stronger reusable protocol, independently authored, now governed by [ModelPromote](https://github.com/Theebban/modelpromote) and runnable offline on synthetic data | [`REFERENCE_IMPLEMENTATION.md`](REFERENCE_IMPLEMENTATION.md) |
+| **B. Reference implementation and method evolution** | A stronger reusable protocol, independently authored, that now delegates the migration lifecycle to [ModelPromote](https://github.com/Theebban/modelpromote) and runnable offline on synthetic data | [`REFERENCE_IMPLEMENTATION.md`](REFERENCE_IMPLEMENTATION.md) |
 
 **The separation is deliberate.** Layer B demonstrates controls that are stronger than the
 ones the historical migration is evidenced to have used. Presenting them as though they

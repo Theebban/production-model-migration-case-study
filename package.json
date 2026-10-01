@@ -2,7 +2,13 @@
   "name": "production-model-migration-case-study",
   "version": "2.0.0",
   "private": true,
-  "description": "A verified production cutover and an independently authored reference implementation of a controlled model migration, now governed by ModelPromote.",
+  "description": "A verified production cutover and an independently authored reference implementation of a controlled model migration that now delegates its migration lifecycle to ModelPromote.",
+  "license": "MIT",
+  "author": "Theebbanraj Asokan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Theebban/production-model-migration-case-study.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=22.6.0"
