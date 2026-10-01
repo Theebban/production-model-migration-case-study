@@ -29,3 +29,21 @@ jobs:
       - run: npm test
       # The demonstration is what the README tells a reader to run, so it is part of the gate.
       - run: npm run demo
+
+  # The documentation must describe this repository: every `npm run` script it names exists,
+  # every relative link resolves, no clone command is a placeholder. Checked by asinstalled,
+  # pinned to an exact release. (asinstalled's `check` does not apply: this repository is a
+  # case study, not a package with entry points to install.)
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Theebban/asinstalled
+          ref: v0.1.0
+          path: .asinstalled
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - run: node --experimental-strip-types .asinstalled/src/cli.ts docs --dir .
